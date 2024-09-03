@@ -1,0 +1,26 @@
+doctype html
+html
+  head
+    title Página Sincronizada
+    script(src="https://cdn.socket.io/4.6.1/socket.io.min.js")
+    script.
+      const socket = io();
+
+      document.addEventListener('DOMContentLoaded', () => {
+        const pageNumberDisplay = document.getElementById('page-number');
+        const updateButton = document.getElementById('update-button');
+
+        // Atualizar o número da página no carregamento
+        socket.on('pageNumber', (pageNumber) => {
+          pageNumberDisplay.textContent = pageNumber;
+        });
+
+        // Enviar a atualização quando o botão for pressionado
+        updateButton.addEventListener('click', () => {
+          const newPageNumber = parseInt(pageNumberDisplay.textContent, 10) + 1;
+          socket.emit('updatePageNumber', newPageNumber);
+        });
+      });
+  body
+    h1 Número da Página: #<span id="page-number">1</span>
+    button(id="update-button") Atualizar Página
